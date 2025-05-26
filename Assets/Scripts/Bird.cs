@@ -76,39 +76,4 @@ public class Bird : MonoBehaviour
     }
 }
 
-    {
-        //if we've thrown the bird
-        //and its speed is very small
-        if (State == BirdState.Thrown &&
-            GetComponent<Rigidbody2D>().velocity.sqrMagnitude <= Constants.MinVelocity)
-        {
-            //destroy the bird after 2 seconds
-            StartCoroutine(DestroyAfter(2));
-        }
-    }
-
-    public void OnThrow()
-    {
-        //play the sound
-        GetComponent<AudioSource>().Play();
-        //show the trail renderer
-        GetComponent<TrailRenderer>().enabled = true;
-        //allow for gravity forces
-        GetComponent<Rigidbody2D>().isKinematic = false;
-        //make the collider normal size
-        GetComponent<CircleCollider2D>().radius = Constants.BirdColliderRadiusNormal;
-        State = BirdState.Thrown;
-    }
-
-    IEnumerator DestroyAfter(float seconds)
-    {
-        yield return new WaitForSeconds(seconds);
-        Destroy(gameObject);
-    }
-
-    public BirdState State
-    {
-        get;
-        private set;
-    }
-}
+    
