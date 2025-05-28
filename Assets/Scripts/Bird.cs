@@ -34,9 +34,7 @@ public class Bird : MonoBehaviour
     }
 
     public void OnThrow()
-    {
-        //play the sound
-        GetComponent<AudioSource>().Play();
+    {   
         //show the trail renderer
         GetComponent<TrailRenderer>().enabled = true;
         //allow for gravity forces
