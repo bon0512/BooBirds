@@ -1,6 +1,12 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
+guid: 525a4ae68f637d544bd5f679fa660c43
+MonoImporter:
+  externalObjects: {}
+=======
 guid: 2cdeddd23d58a0141a6ca4d615b6f58e
 MonoImporter:
+>>>>>>> upstream/master
   serializedVersion: 2
   defaultReferences: []
   executionOrder: 0

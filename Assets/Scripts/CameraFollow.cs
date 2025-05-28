@@ -1,51 +1,40 @@
 ﻿using UnityEngine;
-using System.Collections;
+using Assets.Scripts; // SlingshotState enum 등의 정의가 포함된 네임스페이스 참조
 
-
-//카메라가 새 위치를 따라가는 코드
+/// <summary>
+/// 카메라가 새를 따라가도록 하는 스크립트
+/// </summary>
 public class CameraFollow : MonoBehaviour
 {
+    [HideInInspector]
+    public bool IsFollowing;            // 새를 따라갈지 여부
+    [HideInInspector]
+    public Transform BirdToFollow;      // 따라갈 새의 Transform
+    public SlingShot slingShot;         // 슬링샷 오브젝트 참조 (인스펙터에서 할당)
 
-    // 초기 카메라 위치 저장
+    private const float minCameraX = 0f;     // 카메라가 이동할 수 있는 최소 x값
+    private const float maxCameraX = 30f;    // 카메라가 이동할 수 있는 최대 x값
+
+    public Vector3 StartingPosition;   // 초기 카메라 위치 저장용
+
     void Start()
     {
         StartingPosition = transform.position;
     }
 
-    // 매 프레임마다 업데이트
     void Update()
     {
-        // 새를 추적중인경우
-        if (IsFollowing)
+        if (IsFollowing && BirdToFollow != null)
         {
-            if (BirdToFollow != null) // 새가 장면 밖으로 나가면 제거 되기 때문에 null로 조건 처리를 해주어야한다.
+            // 새가 발사된 상태일 때만 카메라가 따라감
+            if (slingShot.slingshotState == SlingshotState.BirdFlying)
             {
-                var birdPosition = BirdToFollow.transform.position;
-                
-                //새의 위치x를 카메라 이동범위 안으로 제한해 화면 밖으로 튀어나가지 않도록한다.
-                float x = Mathf.Clamp(birdPosition.x, minCameraX, maxCameraX);
-                
+                // 새의 x 좌표를 카메라 이동 제한 범위 내에서 유지
+                float x = Mathf.Clamp(BirdToFollow.position.x, minCameraX, maxCameraX);
 
-                //카메라 x 위치를 새의 위치로 업데이트 x부분만 업데이트 하고 y,z는 그대로 유지
+                // 카메라 x만 새 위치로 이동 (y, z는 고정)
                 transform.position = new Vector3(x, StartingPosition.y, StartingPosition.z);
             }
-            else
-                IsFollowing = false;    //새가 사라졌으면 추적 중단.
         }
     }
-
-    //처음 카메라의 위치를 저장해두는 변수이다.
-    [HideInInspector]
-    public Vector3 StartingPosition;
-
-
-    //각 변수
-    private const float minCameraX = 0; //카메라 이동 최소값
-
-    private const float maxCameraX = 13;    //카메라 이동 최대값 각 설정에 따라 다르게 적용가능
-    
-    [HideInInspector]   //카메라가 새를 추적할 지 여부
-    public bool IsFollowing;
-    [HideInInspector]   //추적할 새의 트랜스폼
-    public Transform BirdToFollow;
 }
