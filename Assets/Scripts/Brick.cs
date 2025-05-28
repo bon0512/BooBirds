@@ -1,59 +1,33 @@
-<<<<<<< HEAD
-癤퓎sing UnityEngine;
-using System.Collections;
-
-public class Brick : MonoBehaviour
-{
-
-
-    void OnCollisionEnter2D(Collision2D col)
-    {
-        if (col.gameObject.GetComponent<Rigidbody2D>() == null) return;
-
-        float damage = col.gameObject.GetComponent<Rigidbody2D>().velocity.magnitude * 10;
-
-        Health -= damage;
-
-        if (Health <= 0)
-            Destroy(this.gameObject);
-    }
-    public float Health = 70f;
-
-
-    //wood sound found in 
-    //https://www.freesound.org/people/Srehpog/sounds/31623/
-}
-=======
-// Brick (구조물) 충돌 처리, 데미지 시스템 구현
 using UnityEngine;
 using System.Collections;
 
-public class Brick : MonoBehaviour // MonoBehaviour 상속
+/// <summary>
+/// Brick (벽돌, 구조물)의 충돌 감지 및 데미지 처리 스크립트
+/// 충돌한 물체의 속도를 기반으로 데미지를 계산하고,
+/// 체력이 0 이하가 되면 오브젝트를 제거합니다.
+/// </summary>
+public class Brick : MonoBehaviour
 {
-
-    // 2D 물리 엔진에서 충돌이 발생했을 때 호출되는 함수
-    // col: 충돌한 상대 오브젝트에 대한 정보를 담고 있음
-    void OnCollisionEnter2D(Collision2D col)
-
-    {
-        // 충돌한 오브젝트에 Rigidbody2D 컴포넌트가 없으면 return
-        if (col.gameObject.GetComponent<Rigidbody2D>() == null) return;
-
-        // 데미지 계산, 데미지= 속도의 크기* 10
-        float damage = col.gameObject.GetComponent<Rigidbody2D>().velocity.magnitude * 10;
-
-        // 데미지만큼 체력 차감
-        Health -= damage;
-
-        // 체력이 0 이하가 되면 오브젝트 제거
-        if (Health <= 0) Destroy(this.gameObject);
-
-    }
-
-    // 벽돌 체력, 0 이하면 오브젝트 제거
+    // Brick의 체력 (초기값: 70)
     public float Health = 70f;
 
+    // 물체와 충돌했을 때 호출됨
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        // 충돌한 오브젝트에 Rigidbody2D가 없으면 충돌 무시
+        if (col.gameObject.GetComponent<Rigidbody2D>() == null) return;
 
+        // 속도 기반 데미지 계산 (속도의 크기 × 10)
+        float damage = col.gameObject.GetComponent<Rigidbody2D>().velocity.magnitude * 10f;
+
+        // 체력에서 데미지만큼 차감
+        Health -= damage;
+
+        // 체력이 0 이하이면 오브젝트 제거
+        if (Health <= 0)
+            Destroy(this.gameObject);
+    }
+
+    // 참고: 충돌 사운드 효과 (나무 부딪힘)
+    // 출처: https://www.freesound.org/people/Srehpog/sounds/31623/
 }
-
->>>>>>> upstream/master

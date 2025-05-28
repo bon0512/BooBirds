@@ -11,74 +11,60 @@ using Assets.Scripts;
 [RequireComponent(typeof(Rigidbody2D))]
 public class Bird : MonoBehaviour
 {
-    // 시작 시 초기 설정을 수행하는 함수 (유니티의 Start 이벤트 함수)
+    // 새의 상태 (던지기 전 / 던져진 후)
+    public BirdState State { get; private set; }
+
+    // 유니티에서 오브젝트 생성 시 호출되는 초기화 함수
     void Start()
     {
-        // 처음엔 트레일(잔상) 표시 안 함
+        // 트레일 렌더러 비활성화 (처음엔 잔상 없음)
         GetComponent<TrailRenderer>().enabled = false;
 
-        // 트레일 렌더러의 출력 레이어를 앞쪽으로 설정
+        // 트레일 렌더러가 앞쪽 레이어에 보이도록 설정
         GetComponent<TrailRenderer>().sortingLayerName = "Foreground";
 
-        // 처음에는 중력 적용되지 않도록 설정 (공중에 정지 상태 유지)
+        // Rigidbody2D에 중력 미적용 (처음에는 멈춘 상태 유지)
         GetComponent<Rigidbody2D>().isKinematic = true;
 
-        // 터치가 쉽도록 콜라이더 반지름 크게 설정
+        // 터치 및 드래그를 쉽게 하기 위해 콜라이더 반지름을 크게 설정
         GetComponent<CircleCollider2D>().radius = Constants.BirdColliderRadiusBig;
 
-        // 새의 상태를 "던지기 전" 상태로 초기화
+        // 상태 초기화: 아직 던지지 않음
         State = BirdState.BeforeThrown;
     }
 
-    // 물리 업데이트 함수 (프레임마다 호출되며 중력, 속도 계산에 적합)
+    // 물리 연산용 업데이트 (프레임마다 호출됨)
     void FixedUpdate()
     {
-        // 만약 새가 이미 던져졌고, 거의 멈춘 상태라면
+        // 새가 던져진 상태이고, 속도가 거의 0에 가까우면
         if (State == BirdState.Thrown &&
             GetComponent<Rigidbody2D>().velocity.sqrMagnitude <= Constants.MinVelocity)
         {
-            // 2초 후에 새를 제거
+            // 2초 뒤에 새 오브젝트 제거
             StartCoroutine(DestroyAfter(2));
         }
     }
 
-    // 새가 던져졌을 때 호출되는 메서드
+    // 새가 던져졌을 때 호출되는 함수
     public void OnThrow()
-<<<<<<< HEAD
-    {   
-        //show the trail renderer
-=======
     {
-        // 사운드 재생
-        GetComponent<AudioSource>().Play();
-
-        // 트레일 렌더링 시작
->>>>>>> upstream/master
+        // 트레일 렌더러 활성화 (잔상 보이기 시작)
         GetComponent<TrailRenderer>().enabled = true;
 
         // 중력 적용 시작
         GetComponent<Rigidbody2D>().isKinematic = false;
 
-        // 콜라이더 크기를 정상 크기로 설정
+        // 콜라이더 반지름을 정상 크기로 설정
         GetComponent<CircleCollider2D>().radius = Constants.BirdColliderRadiusNormal;
 
-        // 상태를 던져진 상태로 변경
+        // 상태 변경: 던져진 상태로
         State = BirdState.Thrown;
     }
 
-    // 일정 시간 후 오브젝트 제거하는 코루틴
+    // 일정 시간 후 새 오브젝트 제거 (코루틴)
     IEnumerator DestroyAfter(float seconds)
     {
         yield return new WaitForSeconds(seconds);
         Destroy(gameObject);
     }
-
-    // 현재 새의 상태 (던지기 전/후)를 저장하는 프로퍼티
-    public BirdState State
-    {
-        get;
-        private set;
-    }
 }
-
-    
